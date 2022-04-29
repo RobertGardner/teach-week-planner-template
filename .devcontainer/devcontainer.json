@@ -1,26 +1,19 @@
 {
-  "name": "week-planner",
+  "name": "${localWorkspaceFolderBasename}",
   "image": "thebearingedge/code-container",
   "mounts": [
-    // get access to the host docker daemon
-    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-    // mount Git configuration
+    // share ssh config
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/dev/.ssh,type=bind",
+    // mount git config
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/dev/.gitconfig,type=bind"
   ],
-  "appPort": [
-    80,    // apache/nginx
-    3000,  // node
-    5000,  // flask
-    8081,  // pgweb
-    9000,  // php-fpm
-    9229,  // node debugger
-    35729  // livereload
-  ],
+  "appPort": [],
   "extensions": [
     "thebearingedge.lfz-code"
   ],
-  "remoteUser": "dev",
-  "postCreateCommand": "test -f package-lock.json && npm ci",
+  "remoteUser": "vscode",
+  "containerUser": "vscode",
+  "postCreateCommand": "sh .devcontainer/post-create-command.sh",
   "settings": {
     "css.validate": false,
     "editor.codeActionsOnSave": {
@@ -61,6 +54,7 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
+    "gitlens.codeLens.enabled": false,
     "javascript.suggest.autoImports": false,
     "javascript.suggestionActions.enabled": false,
     "javascript.updateImportsOnFileMove.enabled": "never",
@@ -73,7 +67,7 @@
     "terminal.integrated.profiles.linux": {
       "bash": {
         "icon": "terminal-bash",
-        "path": "/usr/bin/bash"
+        "path": "/bin/bash"
       }
     },
     "terminal.integrated.tabs.enabled": false,
