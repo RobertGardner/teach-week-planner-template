@@ -2,7 +2,7 @@
   "name": "${localWorkspaceFolderBasename}",
   "image": "thebearingedge/code-container",
   "mounts": [
-    // share ssh config
+    // mount ssh config
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/dev/.ssh,type=bind",
     // mount git config
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/dev/.gitconfig,type=bind"
