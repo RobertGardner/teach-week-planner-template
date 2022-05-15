@@ -1,11 +1,13 @@
 {
   "name": "${containerWorkspaceFolderBasename}",
-  "image": "thebearingedge/code-container",
+  "image": "thebearingedge/code-container:latest",
   "mounts": [
     // mount ssh config
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/dev/.ssh,type=bind",
     // mount git config
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/dev/.gitconfig,type=bind"
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/dev/.gitconfig,type=bind",
+    // persist vscode extensions
+    "target=/home/vscode/.vscode-server/extensions"
   ],
   "appPort": [],
   "extensions": [
@@ -13,5 +15,5 @@
   ],
   "remoteUser": "vscode",
   "containerUser": "vscode",
-  "postCreateCommand": "sh .devcontainer/post-create-command.sh"
+  "postCreateCommand": "curl -fsSL https://raw.githubusercontent.com/thebearingedge/code-container/main/post-create-command.sh | sh"
 }
