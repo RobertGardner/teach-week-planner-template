@@ -1,19 +1,21 @@
 {
-  "name": "${containerWorkspaceFolderBasename}",
-  "image": "thebearingedge/code-container:latest",
+  "workspaceFolder": "/workspace",
+  "image": "learningfuze/lfz-code:latest",
   "mounts": [
-    // mount ssh config
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/dev/.ssh,type=bind",
-    // mount git config
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/dev/.gitconfig,type=bind",
-    // persist vscode extensions
-    "target=/home/vscode/.vscode-server/extensions"
+    "source=${containerWorkspaceFolderBasename}-home_dev,target=/home/dev",
+    "source=${containerWorkspaceFolderBasename}-postgres_data,target=/var/lib/postgresql",
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/dev/.ssh,type=bind"
   ],
-  "appPort": [],
-  "extensions": [
-    "thebearingedge.lfz-code"
-  ],
-  "remoteUser": "vscode",
-  "containerUser": "vscode",
-  "postCreateCommand": "curl -fsSL https://raw.githubusercontent.com/thebearingedge/code-container/main/post-create-command.sh | sh"
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "thebearingedge.lfz-code"
+      ]
+    }
+  },
+  "postCreateCommand": "[ ! -f package-lock.json ] || npm ci",
+  "otherPortsAttributes": {
+    "onAutoForward": "silent"
+  }
 }
